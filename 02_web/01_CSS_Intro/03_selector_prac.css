@@ -1,0 +1,23 @@
+/**{
+    color: deeppink;
+    font-size:25px;
+}
+
+ol,ul{
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+.favorite{
+    color: brown;
+}
+
+#title{
+    color: aquamarine
+}*/
+ol li {
+    color: crimson;
+}
