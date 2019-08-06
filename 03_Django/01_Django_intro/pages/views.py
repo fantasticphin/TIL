@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from datetime import datetime
 import random
+import requests
 
 # Create your views here.
 def index(request):
@@ -102,3 +103,97 @@ def STUdent(request, name):
         'pick': pick,
     }
     return render(request, 'STUdent.html', context)
+
+    #6.실습
+    #6-1. isbirth
+def isbirth(request):
+    today = datetime.now()
+    
+    if today.month == 4 and today.day == 7:
+        result = True
+    else:
+        result = False
+    context = {
+        'result': result,
+    }
+    return render(request, 'isbirth.html', context)
+
+    #6-2 회문인지 판단
+def ispal(request, word):
+    result = False
+    if word == word[::-1]:
+        result = True
+    
+    context = {
+       'word': word,
+       'result': result,
+    }
+    return render(request, 'ispal.html', context)
+
+    #6-3 로또 번호 추첨
+def lotto(request):
+    real_lottos = [21, 24, 30, 32, 40, 42]
+    lottos = list(random.sample(range(1,46), 6))
+
+    context = {
+        'real_lottos': real_lottos,
+        'lottos': lottos,
+    }
+    return render(request, 'lotto.html', context)
+
+#7. Form - GET 요청
+def throw(request):    
+    return render(request, 'throw.html')
+
+def catch(request):
+    message = request.GET.get('message')
+    message2 = request.GET.get('message2')
+    context = {
+        'message': message,
+        'message2': message2, #html 파일에서 볼 수 있게 딕셔너리 형태로 쓴다!!
+    }
+    return render(request, 'catch.html', context)
+
+def ping(request):
+    return render(request, 'ping.html')
+
+def pong(request):
+    message = request.GET.get('message')
+    context = {
+        'message': message,
+    }
+    return render(request, 'pong.html', context)
+
+#8. FORM - GET 실습 (아스키 아티)
+def art(request): #던져줄 함수는 html 에 띄어주는 역할
+    return render(request, 'art.html')
+
+def result(request):
+    #art 에 속한 html의 form 에서 날린 데이터를 받는다
+    funart = request.GET.get('funart')
+    #2. ASCII ART api 로 요청을 보내 응답 결과를 fonts 에 저장한다.
+    fonts = requests.get('http://artii.herokuapp.com/fonts_list').text
+    #fonts(str)를 font(list)로 바꾼다.
+    fonts = fonts.split('\n')
+    #4. fonts(list)안에 들어있는 요소 중 하나를 선택해서 font 라는 변수에 저장(str)
+    font = random.choice(fonts)
+    #5. 위에서 사용자에게 받은 funart 와 font를 가지고 다시 요청을 보낸다. 그리고 응답 결과를 result 에 저장.
+    result = requests.get(f'http://artii.herokuapp.com/make?text={funart}&font={font}').text
+
+    context = {
+        'result':result
+    }
+    return render(request, 'result.html', context)
+
+#9. FORM - POST
+def user_new(request):
+    return render(request, 'user_new.html')
+
+def user_create(request):
+    name = request.POST.get('name')
+    pwd = request.POST.get('pwd')
+    context = {
+        'name': name,
+        'password': pwd, #'변수' 는 html 에서 사용될 변수
+    }
+    return render(request, 'user_create.html', context)
