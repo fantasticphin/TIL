@@ -1,0 +1,14 @@
+{% extends 'base.html' %} <!-- base.html 이 생성된 순간 상속이 가능해짐 -->
+
+{% block body %}
+<h1 class="text-center">Articles</h1>
+    <hr>
+    {% for article in articles %}
+        <p>글 #: {{ article.id }}</p>
+        <p>글 Title: {{ article.title }}</p>
+        <p>글 Contents: {{ article.content }}</p>
+        <a href="/articles/{{ article.pk }}">[상세 글 보러가기]</a>
+        <hr>
+    {% endfor %}
+    <a href="/articles/new/">[글쓰기]</a> 
+{% endblock %}

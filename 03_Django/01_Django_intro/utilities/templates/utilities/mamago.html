@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block body %} <!--block 뒤 문구는 내가 하고 싶은대로-->
+<h1 class="text-center">MAMAGO</h1>
+<h2>영번역을 위한 한글 단어를 입력하세엽</h2>
+<form action="/utilities/translated/" method="GET">
+    번역 단어 입력 : <input type="text", name='word'>
+    <input type="Submit" value='Translate!'>
+</form>
+{% endblock %}

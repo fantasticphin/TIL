@@ -1,0 +1,16 @@
+{% load static %} <!--static type 을 load 한다/ 준비된 서버에 저장시키고 상대방이 요청할 때만 전달해주는 static-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{% static 'stylesheets/style.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    <h1>STATIC 파일 실습</h1>
+    <img src="{% static 'images/nola baby.jpg' %}" alt="bebe">
+    
+</body>
+</html>
