@@ -12,7 +12,7 @@ def new(request):
     return render(request, 'articles/new.html')
 
 def create(request):
-    title = request.POST.get('title')
+    title = request.POST.get('title') #new.html 에서 form action 의 쏘는 박스가 사라지면, print 를 통해 확인해보자
     content = request.POST.get('content')
 
     article = Article(title=title, content=content)
@@ -32,3 +32,18 @@ def delete(request, pk):
     article.delete()
 
     return redirect('/articles/')
+
+def edit(request, pk):
+    article = Article.objects.get(pk=pk)
+    context = {
+        'article': article,
+    }
+    return render(request, 'articles/edit.html', context)
+
+def update(request, pk):
+    article = Article.objects.get(pk=pk) #기존 글을 떙겨오는 역할
+    article.title = request.POST.get('title') #수정 값이 들어있는 박스
+    article.content = request.POST.get('content')
+    article.save()
+
+    return redirect(f'/articles/{article.pk}/') #수정한 글이 제대로 보이는지 확인하는 절차!

@@ -1,10 +1,10 @@
-/**{
-    color: deeppink;
+*{
+    color: black;
     font-size:25px;
 }
 
 ol,ul{
-    list-style-type: none;
+    list-style-type: square;
 }
 
 a {
@@ -16,8 +16,8 @@ a {
 }
 
 #title{
-    color: aquamarine
-}*/
-ol li {
-    color: crimson;
+    color: yellowgreen;
+}
+h2>li {
+    color: purple;
 }

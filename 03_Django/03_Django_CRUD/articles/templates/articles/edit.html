@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block body%}
+<h1 class="text-center">EDIT</h1>
+<form action="/articles/{{ article.pk }}/update/" method='POST'>
+    {% csrf_token %}
+    <label for="title">Title</label><br> <!-- label 은 input 의 id와 동일하다-->
+    <input type="text" id="title" name="title" value="{{ article.title }}"><br> <!-- 오타를 조심하자, / 잘 닫고-->
+    <label for="content">Content</label><br>
+    <textarea name="content" id="content" cols="30" rows="10">{{ article.content }}</textarea><br> <!-- 내용이 많은 친구 -->
+    <input type="Submit" value='써보자아'>
+</form>
+<a href="/articles/" target='_self'></a>
+{% endblock %}
