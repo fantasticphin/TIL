@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <h2 class="text-center">이야하~ 글을 한 번 적어보잤구나</h2>
+    <form action="/articles/create/" method="POST">
+        {% csrf_token %}
+        <label for="title">Title</label>
+        <input type="text" name="title" id="title"><br>
+        <label for="content">Content</label>
+        <textarea name="content" id="content" cols="30" rows="10"></textarea>
+        <input type="Submit" value="글 작성">
+    </form>
+    <hr>
+    <a href="/articles/">[메인 페이지 어서 돌아가세]</a>
+{% endblock %}
