@@ -1,0 +1,16 @@
+{% extends 'base.html' %} <!-- 지금 이 상황은 상속을 받은 것임, base.html 뼈대를 가져온 것-->
+
+{% block body %}
+    <h2 class="text-center">NEW</h2>
+    <form action="/articles/create/" method="POST"> <!-- form 액션을 통해 사용자들과 소통할 수 있음-->
+        {% csrf_token %}
+        <label for="title">Title</label> <!-- 라벨링을 통해 input 의 내용물을 확인하자~-->
+        <input type="text" name="title" id="title"><br>
+        <label for="content">Content</label>
+        <input type="text" name="content" id="content"><br>
+        <textarea name="content" id="content" cols="30" rows="5"></textarea>
+        <input type="Submit" value="글 작성">
+    </form>
+    <hr>
+    <a href="/articles/">[메인 페이지]</a>
+{% endblock %}
