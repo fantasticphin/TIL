@@ -2,6 +2,7 @@ from django.contrib import admin #crud 밑에 위치한 urls 는 검문소 역�
 from django.urls import path, include #include 함수를 통해 들어온 요청을 올바른 곳으로 전송해줌
 
 urlpatterns = [
+    path('jobs/', include('jobs.urls')),
     path('articles/', include('articles.urls')),
     path('admin/', admin.site.urls),
 ]
