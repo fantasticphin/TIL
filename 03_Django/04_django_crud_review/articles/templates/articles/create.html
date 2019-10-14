@@ -1,14 +1,19 @@
 {% extends 'base.html' %} <!-- 지금 이 상황은 상속을 받은 것임, base.html 뼈대를 가져온 것-->
+{% load static %}
 
 {% block body %}
     <h2 class="text-center">NEW</h2>
-    <form action="{% url 'articles:create' %}" method="POST"> <!-- form 액션을 통해 사용자들과 소통할 수 있음-->
+    <img src="{% static 'images/Joker.jpg' %}" alt="Joker_stairs_scene">
+    <img src="{% static 'articles/images/Finn.jpg' %}" alt="Finn of adventure time">
+    <form action="{% url 'articles:create' %}" method="POST" enctype="multipart/form-data"> <!-- form 액션을 통해 사용자들과 소통할 수 있음-->
         {% csrf_token %}
         <label for="title">Title</label> <!-- 라벨링을 통해 input 의 내용물을 확인하자~-->
         <input type="text" name="title" id="title"><br>
         <label for="content">Content</label>
         <input type="text" name="content" id="content"><br>
         <textarea name="content" id="content" cols="30" rows="5"></textarea>
+        <label for="image">Image</label>
+        <input type="file" name="image" id="image" accept="image/"><br>
         <input type="Submit" value="글 작성">
     </form>
     <hr>

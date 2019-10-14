@@ -1,0 +1,13 @@
+{% extends 'base.html' %} <!-- 지금 이 상황은 상속을 받은 것임, base.html 뼈대를 가져온 것-->
+
+{% block body %}
+    <h1 class="text-center">전생의 직업이 궁금해??</h1>
+    <h2 class="text-center">당신의 전생 직업을 알려드림</h2>
+    <hr>
+    <form action="{% url 'jobs:past' %}" method="POST">
+        {% csrf_token %}
+        <label for="name">NAME</label><br>
+        <input type="text" name="name" id="name"><br>
+        <input type="Submit" value="이름 전송">
+    </form>
+{% endblock %}

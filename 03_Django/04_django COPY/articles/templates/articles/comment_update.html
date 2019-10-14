@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h1 class="text-center">COMMENT EDIT</h1> <!-- 사용자가 보이는 글-->
+<form action="" method='POST'> <!-- articles 뒤에 작성한 몇 번 글에 해당하는지 인식표를 잡아줘야함, 수정 버튼 눌렀을 때의 경로-->
+    {% csrf_token %}
+    <label for="content">댓글</label><br>
+    <input type="text" name='content' value='{{ comment.content }}'><br>
+    <input type="Submit" value='댓글 수정'>
+</form>
+<hr>
+<a href="{% url 'articles:index' %}" target='_self'>[Back to main page]</a>
+{% endblock %}
