@@ -1,13 +1,21 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block body %}
     <h1 class="text-center">EDIT</h1> <!-- 사용자가 보이는 글-->
-    <form action="" method='POST'> <!-- articles 뒤에 작성한 몇 번 글에 해당하는지 인식표를 잡아줘야함, 수정 버튼 눌렀을 때의 경로-->
+    {% if article.image %}
+        <img src="{{ article.image.url }}" alt="{{ article.image }}">
+    {% else %}
+        <img src="{% static 'articles/images/noimage.png' %}" alt="no image">
+    {% endif %}
+    <form action="" method='POST' enctype="multipart/form-data"> <!-- articles 뒤에 작성한 몇 번 글에 해당하는지 인식표를 잡아줘야함, 수정 버튼 눌렀을 때의 경로-->
         {% csrf_token %}
         <label for="title">Title</label><br> <!-- label 은 input 의 id와 동일하다-->
         <input type="text" id="title" name="title" value="{{ article.title }}"><br> <!-- 오타를 조심하자, / 잘 닫고, edit 함수에서 부여받아, article 을 바로 쓸 수 있음-->
         <label for="content">Content</label><br>
         <textarea name="content" id="content" cols="30" rows="10">{{ article.content }}</textarea><br> <!-- 내용이 많은 친구 -->
+        <label for="image">Image</label>
+        <input type="file" name="image" id="image" accept="image/"><br>
         <input type="Submit" value='글 수정'>
     </form>
     <hr>

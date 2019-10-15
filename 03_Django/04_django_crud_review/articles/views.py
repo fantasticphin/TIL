@@ -89,6 +89,7 @@ def update(request, article_pk):
         content = request.POST.get('content')
         article.title = title
         article.content = content
+        article.image = request.FILES.get('image')
         article.save()
         return redirect('articles:detail', article.pk)
     else:
