@@ -12,7 +12,18 @@
     <form action="{% url 'articles:delete' article.pk %}" method='POST'>
         {% csrf_token %}
         <input type="submit" value='글 삭제' class='btn btn-primary'>
-        </form>
-    <hr>
+    </form>
+    <form action="{% url 'articles:comments_create' article.pk %}" method="POST">
+        {% csrf_token %}
+        {{ comment_form.as_p }} 
+        <input type="submit" value='댓글 작성' class='btn btn-warning'>
+    </form>
+    <br>
+    <p><b>댓글 목록</b></p>
+    {% for comment in article.comment_set.all %}
+        <li>{{ comment.content }}</li>
+    {% endfor %}
+
+    <a href="{% url 'articles:update' article.pk %}">[글 수정]</a>
     <a href="{% url 'articles:index' %}">[메인 페이지]</a>
 {% endblock %}
