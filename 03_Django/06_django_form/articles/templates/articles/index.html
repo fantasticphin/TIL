@@ -2,11 +2,16 @@
 
 {% block body %}
     <h1>Articles</h1>
+    <p><b>{{ request.user.username }}님의 방문 횟수: {{ visits_num }}{% if vistis_num == 1 %} time {% else %} times {% endif %}</b></p>
     {% for article in articles %}
         <p>글 번호: {{ article.pk }}</p>
         <p>글 제목: {{ article.title }}</p>
         <a href="{% url 'articles:detail' article.pk %}">[글 상세보기]</a>
         <hr>
     {% endfor %}
-    <a href="{% url 'articles:create' %}">[글 작성]</a> <!-- a 태그는 get 요청 밖에 안됌-->
+    {% if user.is_authenticated %}
+        <a href="{% url 'articles:create' %}">[글 작성]</a> <!-- a 태그는 get 요청 밖에 안됌-->
+    {% else %}
+        <a href="{% url 'accounts:login' %}">[글을 보고싶나? 함 노력해봐]</a>
+    {% endif %}
 {% endblock %}
