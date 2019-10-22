@@ -3,10 +3,10 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from .models import Article, Comment
 from .forms import ArticleForm, CommentForm
+import hashlib
 from IPython import embed
 
-def index(request):
-    # embed()
+def index(request): 
     #1. session 정보에서 visits_num 이라는 키로 접근해 값을 가져옴
     # 해당하는 키가 없으면 0을 가져옴
     visits_num = request.session.get('visits_num', 0)
@@ -16,10 +16,9 @@ def index(request):
 
     #3. session data를 수정하면 장고는 수저안 내용을 알 수 없어서 작성하는 코드
     request.session.modified = True
-    # embed()
 
     articles = Article.objects.all()
-    context = {'articles':articles, 'visits_num': visits_num, }
+    context = {'articles':articles, 'visits_num': visits_num,}
     return render(request, 'articles/index.html', context)
 
 @login_required
@@ -33,12 +32,15 @@ def create(request):
     2. Form.save()만 해도 DB에 저장됌
 
     '''
+
     if request.method == 'POST':
         # 폼 인스턴스 생성하고 요청에 의한 데이터로 채운다.
         form = ArticleForm(request.POST)
         # 해당 폼이 유효한지 확인
         if form.is_valid():
-            article = form.save() #form 이랑 model form 과의 차이
+            article = form.save(commit=False) #form 이랑 model form 과의 차이
+            article.user_id = request.user.id
+            article.save()
             # embed()
             # # form.cleaned.data 를 통해 폼 데이터를 정제한다(form.cleaned_data -> Dict)
             # title = form.cleaned_data.get('title')
@@ -73,25 +75,25 @@ def detail(request, article_pk):
 def delete(request, article_pk):
     if request.user.is_authenticated:
         article = get_object_or_404(Article, pk=article_pk)
-        article.delete()
+        if request.user == article.user: #<- article 아래에 있어야지 적용되어 실행이 가능함
+            article.delete()
     return redirect('articles:detail', article.pk)
 
 @login_required
 def update(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)
-    if request.method == 'POST':
-        #instance -> 수정의 대상이 되는 특정한 글 객체
-        form = ArticleForm(request.POST, instance=article)
-        if form.is_valid():
-            form.save()
-            # article.title = form.cleaned_data.get('title')
-            # article.content = form.cleaned_data.get('content')
-            # article.save()
-            # embed()
-            return redirect('articles:detail', article.pk)
-    else: #get 요청
-        form = ArticleForm(instance=article) #.__dict__)
-        # embed()
+    if request.user == article.user:
+        if request.method == 'POST':
+            #instance -> 수정의 대상이 되는 특정한 글 객체
+            form = ArticleForm(request.POST, instance=article)
+            if form.is_valid():
+                form.save()
+                return redirect('articles:detail', article.pk)
+        else: #get 요청
+            form = ArticleForm(instance=article) #.__dict__)
+    else:
+        return redirect('articles:index')
+
     context = {'form':form, 'article': article, }
     return render(request, 'articles/form.html', context)
 
@@ -120,6 +122,7 @@ def comments_create(request, article_pk):
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
+            comment.user = request.user
             comment.article_id = article_pk
             comment.save()
     return redirect('articles:detail', article_pk)
@@ -129,5 +132,6 @@ def comments_create(request, article_pk):
 def comments_delete(request, article_pk, comment_pk):
     if request.user.is_authenticated:
         comment = get_object_or_404(Comment, pk=comment_pk)
-        comment.delete()
+        if request.user == comment.user:
+            comment.delete()
     return redirect('articles:detail', article_pk)

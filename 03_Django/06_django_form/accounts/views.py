@@ -5,7 +5,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import update_session_auth_hash
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
-from .forms import CustomUserChangeForm
+from .forms import CustomUserChangeForm, CustomUserCreationForm
 from IPython import embed
 
 def signup(request):
@@ -13,7 +13,7 @@ def signup(request):
         return redirect('articles:index')
 
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         # embed()
         if form.is_valid():
             user = form.save()
@@ -21,7 +21,7 @@ def signup(request):
             # embed()
             return redirect('articles:index') #articles 앱 이름을 불러와 장고가 찾을 수 있게 도와줌 // redirect 는 GET!!
     else:
-        form = UserCreationForm() # form 인스턴스 생성, 모델폼의 중요성
+        form = CustomUserCreationForm() # form 인스턴스 생성, 모델폼의 중요성
 
     context = {'form': form,}
     return render(request, 'accounts/auth_form.html', context)
