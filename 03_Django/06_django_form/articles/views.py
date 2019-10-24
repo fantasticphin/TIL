@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
-from .models import Article, Comment
+from django.contrib.auth import get_user_model
+from .models import Article, Comment, Hashtag
 from .forms import ArticleForm, CommentForm
 import hashlib
 from IPython import embed
@@ -41,6 +42,14 @@ def create(request):
             article = form.save(commit=False) #form 이랑 model form 과의 차이
             article.user_id = request.user.id
             article.save()
+            #1. content를 공백 기준으로 리스트로 변경후 for 문
+            for word in article.content.split():
+                #2. '#'으로 시작하는 요소를 선택
+                if word.startswith('#'):
+                    #3. word랑 같은 해시 태그를 찾고 있으면 기존 객체를 없으면 새로운 객체 생성
+                    hashtag, created = Hashtag.objects.get_or_create(content=word)
+                    #4. 게시글의 해시태그 목록에 해당 단어를 추가
+                    article.hashtags.add(hashtag)
             # embed()
             # # form.cleaned.data 를 통해 폼 데이터를 정제한다(form.cleaned_data -> Dict)
             # title = form.cleaned_data.get('title')
@@ -57,6 +66,7 @@ def detail(request, article_pk):
     # article = Article.objects.get(pk=article_pk)
     article = get_object_or_404(Article, pk=article_pk)
     comments = article.comment_set.all()
+    person = get_object_or_404(get_user_model(), pk=article.user.pk)
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
@@ -68,6 +78,7 @@ def detail(request, article_pk):
         'article': article,
         'comment_form': comment_form,
         'comments': comments,
+        'person': person,
     }
     return render(request, 'articles/detail.html', context)
 
@@ -87,7 +98,12 @@ def update(request, article_pk):
             #instance -> 수정의 대상이 되는 특정한 글 객체
             form = ArticleForm(request.POST, instance=article)
             if form.is_valid():
-                form.save()
+                article = form.save()
+                article.hashtags.clear()
+                for word in article.content.split():
+                    if word.startswith('#'):
+                        hashtag, created = Hashtag.objects.get_or_create(content=word)
+                        article.hashtags.add(hashtag)
                 return redirect('articles:detail', article.pk)
         else: #get 요청
             form = ArticleForm(instance=article) #.__dict__)
@@ -135,3 +151,42 @@ def comments_delete(request, article_pk, comment_pk):
         if request.user == comment.user:
             comment.delete()
     return redirect('articles:detail', article_pk)
+
+@login_required
+def like(request, article_pk):
+    article = get_object_or_404(Article, pk=article_pk)
+    user = request.user
+    # 1. 해당 게시글 좋아요를 누른 사람들 중에서 user.pk(현재 요청 유저)를 가진 user가 존재하면 삭제
+    if article.like_users.filter(pk=user.pk).exists():
+        #좋아용 취소
+        article.like_users.remove(user)
+    # 2. 존재하지 않는다면 좋아요를 누른 유저 목록에 유저 추가
+    else:
+        #좋아요 누름
+        article.like_users.add(user)
+    return redirect('articles:index')
+
+@login_required
+def follow(request, article_pk, user_pk):
+    #게시글을 작성한 유저
+    person = get_object_or_404(get_user_model(), pk=user_pk)
+    #접속 유저(해당 함수로 요청을 보낸 사람)
+    user = request.user
+
+    # 해당 person 의 팔로워 중에서 이 함수를 요청한 유저가 존재하면
+    if person.followers.filter(pk=user.pk).exists():
+        #언팔로우
+        person.followers.remove(user)
+    # 존재하지 않다면
+    else:
+        # 팔로우
+        person.followers.add(user)
+    return redirect('articles:detail', article_pk)
+
+
+@login_required
+def hashtag(request, hash_pk):
+    hashtag = get_object_or_404(Hashtag, pk=hash_pk)
+    articles = hashtag.article_set.order_by('-pk')
+    context = {'hashtag': hashtag, 'articles': articles,}
+    return render(request, 'articles/hashtag.html', context)

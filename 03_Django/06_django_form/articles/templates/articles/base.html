@@ -1,6 +1,5 @@
 {% load bootstrap4 %}
-{% load gravatar %}
-
+<!-- {% load gravatar %} -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://kit.fontawesome.com/ad17572022.js" crossorigin="anonymous"></script>
     {% bootstrap_css %}
     <style>
     div > h3 {
@@ -17,10 +17,10 @@
     <title>Document</title>
 </head>
 <body>
+    {% include "articles/_nav.html" %}
     <div class="container">
         {% if user.is_authenticated %}
-
-        <h3>
+        <!-- <h3>
             <img src="https://s.gravatar.com/avatar/{{ user.email|makemd5 }}?s=80&d=robohash" alt="gravatar">
             Hello, {{ user.username }} |
             <a href="{% url 'accounts:logout' %}">LOGOUT</a> |
@@ -36,7 +36,7 @@
                 <a href="{% url 'accounts:login' %}">LOGIN</a> |
                 <a href="{% url 'accounts:signup' %}">SIGNUP:사이먼</a> |
             </h3>
-        {% endif %}
+        {% endif %} -->
         {% block body %}
         {% endblock %}
     </div>

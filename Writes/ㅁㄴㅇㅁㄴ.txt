@@ -1,0 +1,10 @@
+게시글 댓글
+좋아요 기능
+모델 폼
+accounts -> login, logout, signup
+
+draw.io
+balsamiq.com
+wunderlist
+
+image 경로 조심~
