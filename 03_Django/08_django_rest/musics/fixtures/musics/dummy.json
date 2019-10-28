@@ -1,0 +1,80 @@
+[
+{
+  "model": "musics.artist",
+  "pk": 1,
+  "fields": {
+    "name": "\uc5b4\uc774\uc720"
+  }
+},
+{
+  "model": "musics.artist",
+  "pk": 2,
+  "fields": {
+    "name": "1cm"
+  }
+},
+{
+  "model": "musics.music",
+  "pk": 1,
+  "fields": {
+    "artist": 1,
+    "title": "\ubaa9\uc694\uc77c\uc5d0 \ub9cc\ub098\uc720"
+  }
+},
+{
+  "model": "musics.music",
+  "pk": 2,
+  "fields": {
+    "artist": 1,
+    "title": "\uc88b\uc740\ub0a0"
+  }
+},
+{
+  "model": "musics.music",
+  "pk": 3,
+  "fields": {
+    "artist": 2,
+    "title": "\uc544\uba54\ub9ac\uce74\ub178"
+  }
+},
+{
+  "model": "musics.music",
+  "pk": 4,
+  "fields": {
+    "artist": 2,
+    "title": "\ubd04\uc774 \uc88b\ub0d0"
+  }
+},
+{
+  "model": "musics.comment",
+  "pk": 1,
+  "fields": {
+    "music": 1,
+    "content": "\ud1a0\uc694\uc77c.."
+  }
+},
+{
+  "model": "musics.comment",
+  "pk": 2,
+  "fields": {
+    "music": 2,
+    "content": "\uc6b0\uc6b8\ud55c \ub0a0"
+  }
+},
+{
+  "model": "musics.comment",
+  "pk": 3,
+  "fields": {
+    "music": 3,
+    "content": "\uc2dc\ub7fd\uc2dc\ub7fd"
+  }
+},
+{
+  "model": "musics.comment",
+  "pk": 4,
+  "fields": {
+    "music": 4,
+    "content": "\uc5ec\ub984\uc774 \uc88b\uc544"
+  }
+}
+]
