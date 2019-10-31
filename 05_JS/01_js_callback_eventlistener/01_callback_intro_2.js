@@ -10,7 +10,7 @@ const fco = function(){  //1. 변수 fco에 함수 저장
 console.log(fco) //2. fco가 console.log() 함수 인자로 전달
 
 // 도전과제 -> num_101 변수에 101을 담아야 한다
-const num_101 = fco()(100)
+const num_101 = fco()(100) // 앞에 함수를 불른거고, 인자를 함수에 넣은거임
 console.log(num_101)
 */
 
