@@ -295,7 +295,6 @@ const USERS = [
 // })
 // console.log(user)
 
-*/
 
 //6. some & every
 
@@ -312,3 +311,39 @@ console.log(result)
 //  배열 내의 모든 요소가 주어진 함수를 통과하는지 테스트하고 결과에 따라 boolean return
 const result2 = arr.every( elem => elem % 2 === 0)
 console.log(result2)
+
+// find Ex1
+// PEOPLE 중에 admin 권한을 가진 요소를 찾아서 admin 상수에 저장해보자
+const PEOPLE = [
+  {id: 1, admin: false},
+  {id: 2, admin: false},
+  {id: 3, admin: true},
+]
+
+// const admin = PEOPLE.find(function(person){
+//   return person.admin === true
+// })
+// console.log(admin)
+const admin = PEOPLE.find(admin => admin.admin === true)
+console.log(admin)
+
+
+//some & every Ex1
+const COMPUTERS = [
+  {name: 'macbook', ram: 16},
+  {name: 'gram', ram: 8},
+  {name: 'series9', ram: 32},
+]
+
+//1. some //2. every
+// const someComputersAvailable = COMPUTERS.some(function(model){
+//   return model.ram > 16
+// })
+// const someComputersAvailable = COMPUTERS.some(model => model.ram > 16)
+const someComputersAvailable = COMPUTERS.every(function(model){
+  return model.ram > 16
+})
+// const someComputersAvailable = COMPUTERS.every(model => model.ram > 16)
+console.log(someComputersAvailable)
+
+*/
