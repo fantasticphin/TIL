@@ -1,0 +1,51 @@
+{% extends 'articles/base.html' %}
+{% load make_link %}
+
+{% block body %}
+    <h2>Detail</h2>
+    <hr>
+    {% include 'articles/_follow.html' %}
+    <hr>
+    <p>글 번호: {{ article.pk }}</p>
+    <p>글 제목: {{ article.title }}</p>
+    <p>글 내용: {{ article|hashtag_link|safe }}</p>
+    <p>글 생성: {{ article.created_at|date:"SHORT_DATE_FORMAT" }}</p>
+    <p>글 수정: {{ article.updated_at|date:"M, j, Y" }}</p>
+    <hr>
+    <p>댓글 작성</p>
+    {% if user.is_authenticated %}
+        <form action="{% url 'articles:comments_create' article.pk %}" method="POST">
+            {% csrf_token %}
+            {{ comment_form.as_p }} 
+            <input type="submit" value='댓글 작성' class='btn btn-warning'>
+        </form>
+    {% else %}
+        <a href="{% url 'accounts:login' %}">댓글 쓰고 싶으면 로긴해라 ㅋ</a>
+    {% endif %}
+    <hr>
+    <p><b>댓글 목록</b></p>
+    <p><b>현재까지 댓글 수: {{ comments.count }}</b></p>
+    {% for comment in comments %}
+    <div>
+        <p><b>댓글 작성자: {{ comment.user }}</b></p>
+        <P>댓글:{{ forloop.revcounter }} 번 : {{ comment.content }}</P>
+        {% if request.user == comment.user %}
+            <form action="{% url 'articles:comments_delete' article.pk comment.pk %}" method='POST'>
+                {% csrf_token %}
+                <input type="submit" value='댓글 삭제' class='btn btn-success'>
+            </form>
+        {% endif %}
+    </div>
+    {% empty %}
+        <p>댓글이 없네유유유ㅠㅠ_ㅠㅠ</p>
+    {% endfor %}
+    <hr>
+    {% if request.user == article.user %}
+        <form action="{% url 'articles:delete' article.pk %}" method='POST'>
+            {% csrf_token %}
+            <input type="submit" value='글 삭제' class='btn btn-primary'>
+        </form>
+        <a href="{% url 'articles:update' article.pk %}">[글 수정]</a>
+    {% endif %}
+    <a href="{% url 'articles:index' %}">[메인 페이지]</a>
+{% endblock %}

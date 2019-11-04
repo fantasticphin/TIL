@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <li v-for="todo in todos" v-if="!todo.completed" @click="check(todo)">
+      {{ todo.content }}
+    </li>
+    <li v-else v-on:click="check(todo)">[완료!]</li>
+    <div>
+      <input type="text" v-model="newTodo" v-on:keyup.enter='addTodo'>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> <!-- 순차적으로 읽기 때문에 스크립트 cdn 은 아래에 있어야 함-->
+  <script>
+    const app = new Vue({
+      //DOM(View)와 Vue instance(view-Model)을 연결(mount)
+      el: '#app',
+      data: {
+        todos: [
+          {
+            content: '점심 메뉴 고민하기',
+            completed: true,
+          },
+          {
+            content: '사다리 타기',
+            completed: false,
+          },
+          {
+            content: '약속의 두시 낮잠자기',
+            completed: false,
+          },
+          {
+            content: '야자하기',
+            completed: false,
+          }
+        ],
+        newTodo: '',
+      },
+      methods: {
+        check: function(todo) {
+          todo.completed = !todo.completed
+        },
+        addTodo: function(){
+          if(this.newTodo !== ''){
+          this.todos.push({
+            content: this.newTodo,
+            completed: false,
+          })
+        }
+          this.newTodo = ''
+        }
+      }
+    })
+  </script>
+</body>
+</html>

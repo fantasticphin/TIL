@@ -1,0 +1,13 @@
+{% extends 'articles/base.html' %}
+{% load bootstrap4 %}
+{% load socialaccount %}
+
+{% block body %}
+<h1>LOGIN</h1>
+<form action="" method="POST"> <!-- 액션 경로를 비워두면 자기 자신한테 요청을 다시 한번 보내는 거임-->
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons submit='Submit' reset='Cancel'%}{% endbuttons %}
+</form>
+<a href="{% provider_login_url 'kakao' %}" class="btn btn-warning">KAKAO LOGIN</a>
+{% endblock %}
